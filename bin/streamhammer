@@ -1,0 +1,9 @@
+#!/bin/sh
+#
+# Execute streamhammer
+#
+# Any options you pass to this script will be passed to streamhammer
+#
+
+DIR="$(dirname $0)"
+exec python "$DIR/../streamhammer/__main__.py" $@
