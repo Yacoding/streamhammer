@@ -1,6 +1,8 @@
 
-import sys
+import cli
 import metadata
+
+import sys
 
 process_name = metadata.package
 
@@ -9,6 +11,7 @@ def setProcessName(name):
     process_name = name
 
 def debugout(s):
-    sys.stderr.flush()
-    print "{0}: {1}".format(process_name, s)
-    sys.stdout.flush()
+    if not cli.settings['quiet']:
+        sys.stderr.flush()
+        print "{0}: {1}".format(process_name, s)
+        sys.stdout.flush()

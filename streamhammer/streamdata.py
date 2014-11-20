@@ -1,5 +1,6 @@
 
-#import librtmp
+from output import debugout
+
 import urllib2
 import json
 from operator import itemgetter
@@ -15,9 +16,9 @@ class StreamData:
     def getManifest(self):
         url = self.opts.get('manifest')
         t = int(self.opts.get('timeout'))
-        print "DOWNLOADING MANIFEST: {0}".format(url)
+        debugout("downloading manifest: {0}".format(url))
         data = urllib2.urlopen(url=url, timeout=t).read()
-        print "manifest: {0}".format(data)
+        debugout("manifest: {0}".format(data))
         manifest = json.loads(data)
         if len(manifest) == 0:
             raise Exception("Manifest is empty from {0}".format(url))
@@ -35,9 +36,9 @@ class StreamData:
             entry = manifest[i]
             if maxBitrate > 0 and entry['bitrate'] <= maxBitrate:
                 return entry
-#            print "getStreamData: Ignore stream[{0}] bitrate {1}".format(i, entry['bitrate'])
+#            debugout("getStreamData: Ignore stream[{0}] bitrate {1}".format(i, entry['bitrate']))
         # No suitable bitrate was found, get the lowest we can
-#        print "getStreamData: Return lowest quality stream"
+#        debugout("getStreamData: Return lowest quality stream")
         return manifest[manifestLen-1]
 
     def getStreamUrl(self):

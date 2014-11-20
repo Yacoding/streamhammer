@@ -5,7 +5,6 @@ from worker import worker
 from output import debugout
 import metadata
 
-#import librtmp
 from multiprocessing import Process
 import datetime
 import urllib2
@@ -40,7 +39,7 @@ class App:
                 offset = offset + 1
         cleaned = max - len(self.children)
         if cleaned > 0:
-            debugout("cleanup: {0}/{1} cleaned".format(max-len(self.children), max))
+            debugout("cleanup: {0}/{1}".format(max-len(self.children), max))
 
     def waitAll(self):
         while len(self.children) > 0:
