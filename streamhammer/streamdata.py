@@ -1,5 +1,5 @@
 
-from output import debugout
+from output import debugout, errorout
 
 import urllib2
 import json
@@ -15,13 +15,26 @@ class StreamData:
 
     def getManifest(self):
         url = self.opts.get('manifest')
-        t = int(self.opts.get('timeout'))
-        debugout("downloading manifest: {0}".format(url))
-        data = urllib2.urlopen(url=url, timeout=t).read()
-        debugout("manifest: {0}".format(data))
-        manifest = json.loads(data)
+
+        try:
+            t = int(self.opts.get('timeout'))
+            debugout("downloading manifest: {0}".format(url))
+            data = urllib2.urlopen(url=url, timeout=t).read()
+        except Exception as e:
+            errorout("Manifest download failed: {0}".format(e.message))
+            raise
+
+        try:
+            debugout("manifest: {0}".format(data))
+            manifest = json.loads(data)
+        except Exception as e:
+            errorout("Manifest is not valid JSON: {0}".format(e.message))
+            raise
+
         if len(manifest) == 0:
+            errorout("Unexpected empty manifest")
             raise Exception("Manifest is empty from {0}".format(url))
+
         # Sort it from highest bitrate to lowest
         sortedManifest = sorted(manifest, key=itemgetter('bitrate'), reverse=True)
         return sortedManifest

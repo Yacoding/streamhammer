@@ -1,4 +1,6 @@
 
+from __future__ import print_function
+
 import cli
 import metadata
 
@@ -13,5 +15,9 @@ def setProcessName(name):
 def debugout(s):
     if not cli.settings['quiet']:
         sys.stderr.flush()
-        print "{0}: {1}".format(process_name, s)
+        print("{0}: {1}".format(process_name, s))
         sys.stdout.flush()
+
+def errorout(s):
+    print("ERROR: {0}: {1}".format(process_name, s), file=sys.stderr)
+    sys.stderr.flush()
