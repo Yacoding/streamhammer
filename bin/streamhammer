@@ -4,6 +4,21 @@
 #
 # Any options you pass to this script will be passed to streamhammer
 #
+# Customize which python gets invoked by setting PYTHON="/custom/python"
+# before you call this script.
+#
 
-DIR="$(dirname $0)"
-exec python "$DIR/../streamhammer/__main__.py" $@
+wut="$(which $0 2> /dev/null)"
+
+if [ "$wut" = "" ]; then
+    wut="$0"
+fi
+
+wut="$(readlink -f $wut)"
+DIR="$(dirname $(dirname $wut))"
+
+PYTHON="${PYTHON:-python}"
+
+export PYTHONPATH="${DIR}:${PYTHONPATH}"
+
+"$PYTHON" -m streamhammer $@ || exit $?
